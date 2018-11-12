@@ -22,6 +22,10 @@ from airflow import configuration
 from airflow.bin.cli import CLIFactory
 
 if __name__ == '__main__':
+     
+    # MacOS High Sierra Compatibility
+    # http://sealiesoftware.com/blog/archive/2017/6/5/Objective-C_and_fork_in_macOS_1013.html
+    os.environ['OBJC_DISABLE_INITIALIZE_FORK_SAFETY'] = 'YES'
 
     if configuration.conf.get("core", "security") == 'kerberos':
         os.environ['KRB5CCNAME'] = configuration.conf.get('kerberos', 'ccache')
