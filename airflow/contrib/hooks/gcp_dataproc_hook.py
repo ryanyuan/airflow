@@ -33,10 +33,6 @@ class _DataProcJob(LoggingMixin):
         self.dataproc_api = dataproc_api
         self.project_id = project_id
         self.region = region
-        self.job = dataproc_api.projects().regions().jobs().submit(
-            projectId=self.project_id,
-            region=self.region,
-            body=job).execute()
         self.job_id = self.job['reference']['jobId']
         self.job_error_states = job_error_states
         self.log.info(
@@ -87,6 +83,38 @@ class _DataProcJob(LoggingMixin):
 
     def get(self):
         return self.job
+
+
+class _DataProcSubmitJob(_DataProcJob, LoggingMixin):
+    def __init__(self, dataproc_api, project_id, job, region='global',
+                 job_error_states=None):
+        self.job = dataproc_api.projects().regions().jobs().submit(
+            projectId=self.project_id,
+            region=self.region,
+            body=job).execute()
+        super(_DataProcJob, self).__init__(
+            dataproc_api=dataproc_api,
+            project_id=project_id,
+            region=region,
+            job=self.job,
+            job_error_states=job_error_states
+        )
+
+
+class _DataProcPatchJob(_DataProcJob, LoggingMixin):
+    def __init__(self, dataproc_api, project_id, job, region='global',
+                 job_error_states=None):
+        self.job = dataproc_api.projects().regions().jobs().patch(
+            projectId=self.project_id,
+            region=self.region,
+            body=job).execute()
+        super(_DataProcJob, self).__init__(
+            dataproc_api=dataproc_api,
+            project_id=project_id,
+            region=region,
+            job=self.job,
+            job_error_states=job_error_states
+        )
 
 
 class _DataProcJobBuilder:
