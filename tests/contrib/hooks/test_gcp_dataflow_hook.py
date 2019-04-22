@@ -51,6 +51,22 @@ DATAFLOW_OPTIONS_TEMPLATE = {
     'tempLocation': 'gs://test/temp',
     'zone': 'us-central1-f'
 }
+RUNTIME_ENV = {
+    'tempLocation': 'gs://test/temp',
+    'zone': 'us-central1-f',
+    'numWorkers': 2,
+    'maxWorkers': 10,
+    'serviceAccountEmail': 'test@apache.airflow',
+    'machineType': 'n1-standard-1',
+    'additionalExperiments': ['exp_flag1', 'exp_flag2'],
+    'network': 'default',
+    'subnetwork': 'regions/REGION/subnetworks/SUBNETWORK',
+    'additionalUserLabels': {
+        'name': 'wrench',
+        'mass': '1.3kg',
+        'count': '3'
+    }
+}
 BASE_STRING = 'airflow.contrib.hooks.gcp_api_base_hook.{}'
 DATAFLOW_STRING = 'airflow.contrib.hooks.gcp_dataflow_hook.{}'
 MOCK_UUID = '12345678'
