@@ -640,3 +640,163 @@ class BigQueryCreateEmptyDatasetOperator(BaseOperator):
             project_id=self.project_id,
             dataset_id=self.dataset_id,
             dataset_reference=self.dataset_reference)
+
+
+class BigQueryDeleteModelOperator(BaseOperator):
+    emplate_fields = ('dataset_id', 'model_id', 'project_id')
+    ui_color = '#f0eee4'
+
+    @apply_defaults
+    def __init__(self,
+                 dataset_id,
+                 model_id,
+                 project_id=None,
+                 bigquery_conn_id='bigquery_default',
+                 delegate_to=None,
+                 *args, **kwargs):
+        self.dataset_id = dataset_id
+        self.model_id = model_id
+        self.project_id = project_id
+        self.bigquery_conn_id = bigquery_conn_id
+        self.delegate_to = delegate_to
+
+        self.log.info('Dataset id: %s', self.dataset_id)
+        self.log.info('Model id: %s', self.model_id)
+        self.log.info('Project id: %s', self.project_id)
+
+        super(BigQueryDeleteModelOperator, self).__init__(*args, **kwargs)
+
+    def execute(self, context):
+        bq_hook = BigQueryHook(bigquery_conn_id=self.bigquery_conn_id,
+                               delegate_to=self.delegate_to)
+
+        conn = bq_hook.get_conn()
+        cursor = conn.cursor()
+
+        result = cursor.delete_model(
+            project_id=self.project_id,
+            dataset_id=self.dataset_id,
+            model_id=self.model_id)
+        self.log.info('Hello %s', str(result))
+
+
+class BigQueryGetModelOperator(BaseOperator):
+    emplate_fields = ('dataset_id', 'model_id', 'project_id')
+    ui_color = '#f0eee4'
+
+    @apply_defaults
+    def __init__(self,
+                 dataset_id,
+                 model_id,
+                 project_id=None,
+                 bigquery_conn_id='bigquery_default',
+                 delegate_to=None,
+                 *args, **kwargs):
+        self.dataset_id = dataset_id
+        self.model_id = model_id
+        self.project_id = project_id
+        self.bigquery_conn_id = bigquery_conn_id
+        self.delegate_to = delegate_to
+
+        self.log.info('Dataset id: %s', self.dataset_id)
+        self.log.info('Model id: %s', self.model_id)
+        self.log.info('Project id: %s', self.project_id)
+
+        super(BigQueryGetModelOperator, self).__init__(*args, **kwargs)
+
+    def execute(self, context):
+        bq_hook = BigQueryHook(bigquery_conn_id=self.bigquery_conn_id,
+                               delegate_to=self.delegate_to)
+
+        conn = bq_hook.get_conn()
+        cursor = conn.cursor()
+
+        result = cursor.get_model(
+            project_id=self.project_id,
+            dataset_id=self.dataset_id,
+            model_id=self.model_id)
+        self.log.info('Hello %s', str(result))
+
+
+class BigQueryListModelOperator(BaseOperator):
+    emplate_fields = ('dataset_id', 'project_id')
+    ui_color = '#f0eee4'
+
+    @apply_defaults
+    def __init__(self,
+                 dataset_id,
+                 project_id=None,
+                 bigquery_conn_id='bigquery_default',
+                 delegate_to=None,
+                 *args, **kwargs):
+        self.dataset_id = dataset_id
+        self.project_id = project_id
+        self.bigquery_conn_id = bigquery_conn_id
+        self.delegate_to = delegate_to
+
+        self.log.info('Dataset id: %s', self.dataset_id)
+        self.log.info('Project id: %s', self.project_id)
+
+        super(BigQueryListModelOperator, self).__init__(*args, **kwargs)
+
+    def execute(self, context):
+        bq_hook = BigQueryHook(bigquery_conn_id=self.bigquery_conn_id,
+                               delegate_to=self.delegate_to)
+
+        conn = bq_hook.get_conn()
+        cursor = conn.cursor()
+
+        result = cursor.list_model(
+            project_id=self.project_id,
+            dataset_id=self.dataset_id)
+        self.log.info('Hello %s', str(result))
+
+
+class BigQueryPatchModelOperator(BaseOperator):
+    emplate_fields = ('dataset_id', 'model_id', 'project_id')
+    ui_color = '#f0eee4'
+
+    @apply_defaults
+    def __init__(self,
+                 dataset_id,
+                 model_id,
+                 project_id=None,
+                 description=None,
+                 friendly_name=None,
+                 labels=None,
+                 expiration_time=None,
+                 bigquery_conn_id='bigquery_default',
+                 delegate_to=None,
+                 *args, **kwargs):
+        self.dataset_id = dataset_id
+        self.project_id = project_id
+        self.model_id = model_id
+        self.bigquery_conn_id = bigquery_conn_id
+        self.delegate_to = delegate_to
+        self.description = description
+        self.friendly_name = friendly_name
+        self.labels = labels
+        self.expiration_time = expiration_time
+
+        self.log.info('Dataset id: %s', self.dataset_id)
+        self.log.info('Model id: %s', self.model_id)
+        self.log.info('Project id: %s', self.project_id)
+
+        super(BigQueryPatchModelOperator, self).__init__(*args, **kwargs)
+
+    def execute(self, context):
+        bq_hook = BigQueryHook(bigquery_conn_id=self.bigquery_conn_id,
+                               delegate_to=self.delegate_to)
+
+        conn = bq_hook.get_conn()
+        cursor = conn.cursor()
+
+        result = cursor.patch_model(
+            project_id=self.project_id,
+            dataset_id=self.dataset_id,
+            model_id=self.model_id,
+            description=self.description,
+            friendly_name=self.friendly_name,
+            labels=self.labels,
+            expiration_time=self.expiration_time)
+        self.log.info('Hello %s', str(result))
